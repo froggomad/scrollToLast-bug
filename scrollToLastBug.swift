@@ -58,6 +58,7 @@ override func viewDidLoad() {
     NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 }
 
+//BUG: Doesn't scroll at all, or scrolls to top if collection is scrolled to bottom
 override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     //listen for new messages
@@ -72,7 +73,7 @@ override func viewDidAppear(_ animated: Bool) {
     }
 }
 
-//scrolls to the last item
+//scrolls to the last item IF the collectionView is scrolled to the bottom manually first, otherwise it does nothing or scrolls to the top
 @objc func keyboardWillShow(notification: NSNotification) {
     if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
         //31 from storyboard bottom constraint
@@ -85,6 +86,7 @@ override func viewDidAppear(_ animated: Bool) {
         collection.scrollToLast()
     }
 }
+
 //scrolls to just above the last item
 @objc func keyboardWillHide(notification: NSNotification) {
     self.adBottomConstraint.constant = 31 //match storyboard
